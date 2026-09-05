@@ -200,8 +200,8 @@ export const CDCOverview: React.FC = () => {
         </div>
       </div>
 
-      {/* Secondary Analytics Row (4 Panels) */}
-      <div className="grid grid-cols-4 gap-4">
+      {/* Secondary Analytics Row (3 Panels) */}
+      <div className="grid grid-cols-3 gap-4">
         {/* 7A. Institutional Technical Health */}
         <div className="bg-white border border-slate-200/80 rounded-xl p-4 shadow-xs flex flex-col justify-between space-y-3">
           <div>
@@ -263,61 +263,6 @@ export const CDCOverview: React.FC = () => {
           <div className="pt-2 border-t border-slate-100">
             <span onClick={() => setCurrentScreen('skills-intelligence')} className="text-blue-600 text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1">
               View full analysis →
-            </span>
-          </div>
-        </div>
-
-        {/* 7B. What Changed? */}
-        <div className="bg-white border border-slate-200/80 rounded-xl p-4 shadow-xs flex flex-col justify-between space-y-3">
-          <div>
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight mb-3">What Changed?</h3>
-
-            <div className="space-y-3 text-xs">
-              <div className="flex items-start gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
-                  <TrendingUp className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <p className="font-bold text-emerald-600 text-[11px]">+12% Technical activity increased</p>
-                  <p className="text-[11px] text-slate-500 leading-tight">1,240 more active students this month</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 mt-0.5">
-                  <ArrowDownRight className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <p className="font-bold text-rose-600 text-[11px]">-8% Contest participation decreased</p>
-                  <p className="text-[11px] text-slate-500 leading-tight">Across 2027 batch</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 mt-0.5">
-                  <Users className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <p className="font-bold text-purple-700 text-[11px]">43 Students entered high-growth segment</p>
-                  <p className="text-[11px] text-slate-500 leading-tight">Significant improvement detected</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5">
-                <div className="w-6 h-6 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 mt-0.5">
-                  <AlertTriangle className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-800 text-[11px]">Dynamic Programming</p>
-                  <p className="text-[11px] text-slate-500 leading-tight">Became the largest skill gap in 2027 batch</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-2 border-t border-slate-100">
-            <span onClick={() => setCurrentScreen('talent-pool')} className="text-blue-600 text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1">
-              View all changes →
             </span>
           </div>
         </div>
