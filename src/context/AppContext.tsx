@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import { 
   Student, Group, Mentor, Opportunity, Intervention, 
-  Department, AcademicYear, Batch, StudentStatus, AssignmentHistoryItem 
+  Department, AcademicYear, Batch, StudentStatus, AssignmentHistoryItem,
+  UserRole, AuthUser
 } from '../types';
 import { 
   INITIAL_STUDENTS, INITIAL_GROUPS, INITIAL_MENTORS, 
@@ -9,6 +10,7 @@ import {
 } from '../data/mockData';
 
 export type ScreenId = 
+  | 'login'                // Login Screen
   | 'overview'             // Screen 1
   | 'talent-pool'          // Screen 2
   | 'student-profile'      // Screen 3
@@ -20,12 +22,20 @@ export type ScreenId =
   | 'opportunity-detail'   // Screen 7b (Opportunity Detail Page)
   | 'interventions'        // Screen 8 (Interventions Landing Page)
   | 'intervention-detail'  // Screen 8b (Intervention Detail Page)
-  | 'mentor-management';   // Screen 9 (Global Mentor Management)
+  | 'mentor-management'    // Screen 9 (Global Mentor Management)
+  | 'mentor-dashboard'     // Mentor Role Experience
+  | 'student-dashboard';   // Student Role Experience
 
 interface AppContextType {
   currentScreen: ScreenId;
   setCurrentScreen: (screen: ScreenId) => void;
   
+  // Auth state
+  user: AuthUser | null;
+  isAuthenticated: boolean;
+  login: (username: string, password: string, role: UserRole) => { success: boolean; message?: string };
+  logout: () => void;
+
   // Selection states
   selectedStudentId: string;
   setSelectedStudentId: (id: string) => void;
@@ -81,7 +91,18 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentScreen, setCurrentScreen] = useState<ScreenId>('overview');
+  const [currentScreen, setCurrentScreen] = useState<ScreenId>('login');
+  
+  // Auth state
+  const [user, setUser] = useState<AuthUser | null>({
+    id: 'u-cdc',
+    username: 'cdc',
+    name: 'GLBITM CDC Admin',
+    role: 'CDC',
+    email: 'cdc@glbitm.ac.in',
+    dept: 'CSE'
+  });
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [selectedStudentId, setSelectedStudentId] = useState<string>('s1');
   const [selectedGroupId, setSelectedGroupId] = useState<string>('g1');
   const [selectedOpportunityId, setSelectedOpportunityId] = useState<string>('opp1');
@@ -274,9 +295,62 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setNlQuery('');
   };
 
+  const login = (username: string, password: string, role: UserRole) => {
+    // Demo credentials matching logic
+    let newUser: AuthUser;
+    
+    if (role === 'CDC') {
+      newUser = {
+        id: 'u-cdc',
+        username: username || 'cdc',
+        name: 'GLBITM CDC Admin',
+        role: 'CDC',
+        email: `${username || 'cdc'}@glbitm.ac.in`,
+        dept: 'CSE'
+      };
+      setUser(newUser);
+      setIsAuthenticated(true);
+      setCurrentScreen('overview');
+      return { success: true };
+    } else if (role === 'Mentor') {
+      newUser = {
+        id: 'u-mentor',
+        username: username || 'mentor',
+        name: 'Dr. Rajesh Sharma',
+        role: 'Mentor',
+        email: `${username || 'mentor'}@glbitm.ac.in`,
+        dept: 'CSE'
+      };
+      setUser(newUser);
+      setIsAuthenticated(true);
+      setCurrentScreen('mentor-dashboard');
+      return { success: true };
+    } else {
+      newUser = {
+        id: 'u-student',
+        username: username || 'student',
+        name: 'Aarav Sharma',
+        role: 'Student',
+        email: `${username || 'student'}@glbitm.ac.in`,
+        dept: 'CSE'
+      };
+      setUser(newUser);
+      setIsAuthenticated(true);
+      setCurrentScreen('student-dashboard');
+      return { success: true };
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    setCurrentScreen('login');
+  };
+
   return (
     <AppContext.Provider value={{
       currentScreen, setCurrentScreen,
+      user, isAuthenticated, login, logout,
       selectedStudentId, setSelectedStudentId,
       selectedGroupId, setSelectedGroupId,
       selectedOpportunityId, setSelectedOpportunityId,

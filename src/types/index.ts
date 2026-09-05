@@ -12,6 +12,18 @@ export type StudentStatus =
 
 export type SkillLevel = 'Strong' | 'Good' | 'Developing' | 'Weak' | 'Insufficient Evidence';
 
+export type UserRole = 'CDC' | 'Mentor' | 'Student';
+
+export interface AuthUser {
+  id: string;
+  username: string;
+  name: string;
+  role: UserRole;
+  email: string;
+  avatar?: string;
+  dept?: Department;
+}
+
 export type PlatformName = 
   | 'GitHub' 
   | 'LeetCode' 

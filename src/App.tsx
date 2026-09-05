@@ -4,6 +4,7 @@ import { Sidebar } from './components/layout/Sidebar';
 import { TopNavigation } from './components/layout/TopNavigation';
 import { ContextFilterBar } from './components/layout/ContextFilterBar';
 
+import { LoginPage } from './components/screens/LoginPage';
 import { CDCOverview } from './components/screens/CDCOverview';
 import { TalentPool } from './components/screens/TalentPool';
 import { StudentProfile } from './components/screens/StudentProfile';
@@ -16,11 +17,15 @@ import { OpportunityDetail } from './components/screens/OpportunityDetail';
 import { Interventions } from './components/screens/Interventions';
 import { InterventionDetail } from './components/screens/InterventionDetail';
 import { MentorManagement } from './components/screens/MentorManagement';
+import { MentorDashboard } from './components/screens/MentorDashboard';
+import { StudentDashboard } from './components/screens/StudentDashboard';
 
 const ScreenRouter: React.FC = () => {
   const { currentScreen } = useApp();
 
   switch (currentScreen) {
+    case 'login':
+      return <LoginPage />;
     case 'overview':
       return <CDCOverview />;
     case 'talent-pool':
@@ -45,12 +50,34 @@ const ScreenRouter: React.FC = () => {
       return <InterventionDetail />;
     case 'mentor-management':
       return <MentorManagement />;
+    case 'mentor-dashboard':
+      return <MentorDashboard />;
+    case 'student-dashboard':
+      return <StudentDashboard />;
     default:
-      return <CDCOverview />;
+      return <LoginPage />;
   }
 };
 
 export function AppContent() {
+  const { currentScreen } = useApp();
+
+  // If on login screen, render full-screen LoginPage without sidebar / topbar
+  if (currentScreen === 'login') {
+    return <LoginPage />;
+  }
+
+  // If on Mentor role experience, render full-screen MentorDashboard
+  if (currentScreen === 'mentor-dashboard') {
+    return <MentorDashboard />;
+  }
+
+  // If on Student role experience, render full-screen StudentDashboard
+  if (currentScreen === 'student-dashboard') {
+    return <StudentDashboard />;
+  }
+
+  // CDC Institutional Dashboard Shell
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#F8FAFC] text-slate-800 font-sans select-none">
       {/* 1. Dark Left Sidebar */}

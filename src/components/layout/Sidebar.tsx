@@ -64,14 +64,18 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       {/* User & Environment Scope */}
-      <div className="p-3 border-t border-slate-800 bg-slate-950/60 text-xs">
-        <div className="flex items-center justify-between text-slate-400 mb-1">
+      <div className="p-3 border-t border-slate-800 bg-slate-950/60 text-xs space-y-2">
+        <div className="flex items-center justify-between text-slate-400">
           <span className="text-[11px] font-semibold text-slate-300">GLBITM CDC/CTC Portal</span>
-          <span className="px-1.5 py-0.5 text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 rounded">
-            Live Demo
-          </span>
+          <button
+            onClick={() => setCurrentScreen('login')}
+            className="px-2 py-0.5 text-[10px] font-bold bg-[#008ca5]/20 text-teal-300 border border-[#008ca5]/40 rounded hover:bg-[#008ca5]/40 transition-colors"
+            title="Return to Login Screen"
+          >
+            Lock / Switch Role
+          </button>
         </div>
-        <p className="text-[11px] text-slate-500">
+        <p className="text-[10px] text-slate-500">
           Data Model: Multi-Platform Sync (GitHub, LeetCode, CF, GFG)
         </p>
       </div>
