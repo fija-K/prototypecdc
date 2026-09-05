@@ -24,7 +24,8 @@ export type ScreenId =
   | 'intervention-detail'  // Screen 8b (Intervention Detail Page)
   | 'mentor-management'    // Screen 9 (Global Mentor Management)
   | 'mentor-dashboard'     // Mentor Role Experience
-  | 'student-dashboard';   // Student Role Experience
+  | 'student-dashboard'
+  | 'student-my-profile';   // Student Role Experience
 
 interface AppContextType {
   currentScreen: ScreenId;

@@ -16,14 +16,14 @@ export const StudentDashboard: React.FC = () => {
           </div>
           <div>
             <h1 className="font-extrabold text-sm tracking-wide">GLBITM STUDENT PORTAL</h1>
-            <p className="text-[11px] text-teal-400 font-medium">Technical Intelligence • Student Dashboard</p>
+            <p className="text-[11px] text-teal-400 font-medium">Technical Intelligence  Student Dashboard</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
           <div className="text-right">
             <p className="text-xs font-bold text-slate-100">{user?.name || student?.name || 'Aarav Sharma'}</p>
-            <p className="text-[10px] text-slate-400 font-medium">B.Tech CSE • Batch 2026</p>
+            <p className="text-[10px] text-slate-400 font-medium">B.Tech CSE  Batch 2026</p>
           </div>
 
           <button
@@ -59,10 +59,10 @@ export const StudentDashboard: React.FC = () => {
                   High Potential
                 </span>
               </div>
-              <p className="text-xs text-slate-300 mt-1">Roll No: {student.rollNo} • Section A</p>
+              <p className="text-xs text-slate-300 mt-1">Roll No: {student.rollNo}  Section A</p>
               <div className="flex items-center gap-4 mt-2 text-xs font-semibold text-teal-300">
                 <span>Inst Rank: #{student.percentiles.inst} percentile</span>
-                <span>•</span>
+                <span></span>
                 <span>Dept Rank: Top {student.percentiles.dept}%</span>
               </div>
             </div>
@@ -70,7 +70,7 @@ export const StudentDashboard: React.FC = () => {
 
           <div className="flex gap-3">
             <button 
-              onClick={() => setCurrentScreen('student-profile')}
+              onClick={() => setCurrentScreen('student-my-profile')}
               className="px-4 py-2.5 bg-[#008ca5] hover:bg-[#00798f] text-white font-bold text-xs rounded-lg transition-colors shadow-md"
             >
               View Full Technical Dossier

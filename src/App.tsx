@@ -19,6 +19,7 @@ import { InterventionDetail } from './components/screens/InterventionDetail';
 import { MentorManagement } from './components/screens/MentorManagement';
 import { MentorDashboard } from './components/screens/MentorDashboard';
 import { StudentDashboard } from './components/screens/StudentDashboard';
+import { StudentMyProfile } from './components/screens/StudentMyProfile';
 
 const ScreenRouter: React.FC = () => {
   const { currentScreen } = useApp();
@@ -54,6 +55,8 @@ const ScreenRouter: React.FC = () => {
       return <MentorDashboard />;
     case 'student-dashboard':
       return <StudentDashboard />;
+    case 'student-my-profile':
+      return <StudentMyProfile />;
     default:
       return <LoginPage />;
   }
@@ -75,6 +78,11 @@ export function AppContent() {
   // If on Student role experience, render full-screen StudentDashboard
   if (currentScreen === 'student-dashboard') {
     return <StudentDashboard />;
+  }
+
+  // If on Student My Profile screen
+  if (currentScreen === 'student-my-profile') {
+    return <StudentMyProfile />;
   }
 
   // CDC Institutional Dashboard Shell
