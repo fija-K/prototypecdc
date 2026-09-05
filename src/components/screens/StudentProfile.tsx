@@ -138,7 +138,7 @@ export const StudentProfile: React.FC = () => {
                 {student.dept} <span className="text-slate-300">•</span> {student.year} <span className="text-slate-300">•</span> Batch of {student.batch}
               </p>
               <p className="text-[11px] text-slate-400 font-mono mt-0.5">
-                Roll No: CSE27B045 <span className="text-slate-300">•</span> Email: aarav.sharma@glbajaj.ac.in
+                Roll No: CSE27B045 <span className="text-slate-300">•</span> Email: aarav.sharma@glbitm.ac.in
               </p>
             </div>
           </div>

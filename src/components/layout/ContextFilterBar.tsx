@@ -22,7 +22,7 @@ export const ContextFilterBar: React.FC = () => {
           <div>
             <span className="text-[10px] text-slate-400 font-medium uppercase tracking-tight block leading-tight">Institution</span>
             <div className="flex items-center gap-1 font-bold text-slate-800 text-xs">
-              <span>GL Bajaj College of Engineering</span>
+              <span>GL Bajaj Institute of Technology and Management</span>
               <ChevronDown className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-800" />
             </div>
           </div>
