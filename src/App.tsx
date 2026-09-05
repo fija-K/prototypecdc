@@ -20,6 +20,7 @@ import { MentorManagement } from './components/screens/MentorManagement';
 import { MentorDashboard } from './components/screens/MentorDashboard';
 import { StudentDashboard } from './components/screens/StudentDashboard';
 import { StudentMyProfile } from './components/screens/StudentMyProfile';
+import { StudentMyGroups } from './components/screens/StudentMyGroups';
 
 const ScreenRouter: React.FC = () => {
   const { currentScreen } = useApp();
@@ -57,6 +58,8 @@ const ScreenRouter: React.FC = () => {
       return <StudentDashboard />;
     case 'student-my-profile':
       return <StudentMyProfile />;
+    case 'student-groups':
+      return <StudentMyGroups />;
     default:
       return <LoginPage />;
   }
@@ -83,6 +86,11 @@ export function AppContent() {
   // If on Student My Profile screen
   if (currentScreen === 'student-my-profile') {
     return <StudentMyProfile />;
+  }
+
+  // If on Student My Groups screen
+  if (currentScreen === 'student-groups') {
+    return <StudentMyGroups />;
   }
 
   // CDC Institutional Dashboard Shell
