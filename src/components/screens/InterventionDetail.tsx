@@ -4,7 +4,7 @@ import {
   ArrowLeft, Target, Users, Calendar, Clock, CheckCircle2, 
   AlertTriangle, TrendingUp, ShieldCheck, FileText, Plus, 
   UserCheck, Download, MoreHorizontal, ChevronRight, Award, 
-  BarChart2, Search, ExternalLink
+  BarChart2, Search, ExternalLink, Sparkles, Check, Play, Edit
 } from 'lucide-react';
 
 export const InterventionDetail: React.FC = () => {
@@ -22,133 +22,161 @@ export const InterventionDetail: React.FC = () => {
 
   if (!currentIntervention) {
     return (
-      <div className="p-6 text-slate-300">
-        Intervention not found. <button onClick={() => setCurrentScreen('interventions')} className="text-blue-400 font-semibold underline">Back to list</button>
+      <div className="p-6 text-slate-600 bg-[#F8FAFC]">
+        Intervention not found. <button onClick={() => setCurrentScreen('interventions')} className="text-blue-600 font-semibold underline">Back to list</button>
       </div>
     );
   }
 
   const scoreDelta = currentIntervention.currentAvgScore - currentIntervention.baselineAvgScore;
-  const pctDelta = Math.round((scoreDelta / currentIntervention.baselineAvgScore) * 100);
+  const targetGap = currentIntervention.targetAvgScore - currentIntervention.currentAvgScore;
 
-  // Filter cohort students
+  // Enrolled students list
   const enrolledStudents = students.filter(s => 
-    currentIntervention.studentIds.includes(s.id) || (studentSearch ? s.name.toLowerCase().includes(studentSearch.toLowerCase()) : true)
+    currentIntervention.studentIds.includes(s.id) || 
+    (studentSearch ? s.name.toLowerCase().includes(studentSearch.toLowerCase()) : true)
   );
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-4rem)] bg-slate-950 text-slate-100 font-sans">
+    <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-4rem)] bg-[#F8FAFC] text-slate-800 font-sans">
       
       {/* Back Button & Header */}
       <div className="space-y-4">
         <button
           onClick={() => setCurrentScreen('interventions')}
-          className="text-xs font-semibold text-slate-400 hover:text-blue-400 flex items-center gap-1.5 transition-colors"
+          className="text-xs font-semibold text-slate-500 hover:text-blue-600 flex items-center gap-1.5 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Interventions
         </button>
 
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-indigo-950 text-indigo-300 border border-indigo-800 uppercase tracking-wider">
+              <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 uppercase tracking-wider">
                 {currentIntervention.type} Action
               </span>
               <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold border ${
-                currentIntervention.status === 'Active' ? 'bg-emerald-950 text-emerald-300 border-emerald-800' :
-                currentIntervention.status === 'Completed' ? 'bg-blue-950 text-blue-300 border-blue-800' :
-                'bg-amber-950 text-amber-300 border-amber-800'
+                currentIntervention.status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-300' :
+                currentIntervention.status === 'Completed' ? 'bg-purple-50 text-purple-700 border-purple-300' :
+                currentIntervention.status === 'Needs Attention' ? 'bg-rose-50 text-rose-700 border-rose-300' :
+                'bg-amber-50 text-amber-700 border-amber-300'
               }`}>
                 {currentIntervention.status}
               </span>
-              {currentIntervention.targetSkill && (
-                <span className="px-2.5 py-0.5 rounded text-[10px] font-semibold bg-slate-900 text-slate-300 border border-slate-800">
-                  Target Skill: {currentIntervention.targetSkill}
-                </span>
-              )}
+              <span className="text-xs font-semibold text-slate-500">ID: {currentIntervention.id}</span>
             </div>
-
-            <h1 className="text-2xl font-bold text-slate-100">{currentIntervention.name}</h1>
-            <p className="text-xs text-slate-400 max-w-3xl">
-              {currentIntervention.subtitle || currentIntervention.problemIdentified}
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{currentIntervention.name}</h1>
+            <p className="text-xs text-slate-600 flex items-center gap-2">
+              <Target className="w-3.5 h-3.5 text-blue-600" />
+              <span className="font-semibold text-slate-700">Problem Focus:</span> {currentIntervention.problemIdentified}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <button className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 rounded-lg text-xs font-medium flex items-center gap-1.5">
-              <UserCheck className="w-3.5 h-3.5 text-indigo-400" />
-              Assign Mentor
+          <div className="flex items-center gap-2.5 shrink-0">
+            <button className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 shadow-2xs flex items-center gap-1.5">
+              <Edit className="w-3.5 h-3.5 text-slate-500" />
+              Edit Program
             </button>
-            <button className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 rounded-lg text-xs font-medium flex items-center gap-1.5">
-              <Download className="w-3.5 h-3.5 text-slate-400" />
-              Export Dossier
+            <button className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 shadow-2xs flex items-center gap-1.5">
+              <Download className="w-3.5 h-3.5 text-slate-500" />
+              Export Report
             </button>
-            <button className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold shadow-md flex items-center gap-1.5">
-              <Plus className="w-4 h-4" />
-              Add Students
+            <button className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              Log Activity
             </button>
           </div>
         </div>
       </div>
 
-      {/* Top Metrics Cards Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-          <span className="text-[10px] text-slate-400 uppercase font-semibold block">Baseline Avg Score</span>
-          <span className="text-xl font-bold text-slate-300">{currentIntervention.baselineAvgScore} pts</span>
-          <span className="text-[10px] text-slate-500 block">Initial Benchmark</span>
-        </div>
-
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-          <span className="text-[10px] text-slate-400 uppercase font-semibold block">Current Avg Score</span>
-          <span className="text-xl font-bold text-emerald-400">{currentIntervention.currentAvgScore} pts</span>
-          <span className="text-[10px] text-emerald-400 font-semibold block">+{scoreDelta} pts (+{pctDelta}%)</span>
-        </div>
-
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-          <span className="text-[10px] text-slate-400 uppercase font-semibold block">Target Avg Score</span>
-          <span className="text-xl font-bold text-indigo-400">{currentIntervention.targetAvgScore} pts</span>
-          <span className="text-[10px] text-slate-400 block">Target Goal</span>
-        </div>
-
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-          <span className="text-[10px] text-slate-400 uppercase font-semibold block">Enrolled Students</span>
-          <span className="text-xl font-bold text-slate-100">{currentIntervention.studentCount || currentIntervention.studentIds.length}</span>
-          <span className="text-[10px] text-slate-400 block">Cohort Size</span>
-        </div>
-
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-          <span className="text-[10px] text-slate-400 uppercase font-semibold block">Progress</span>
-          <span className="text-xl font-bold text-blue-400">{currentIntervention.progressPercent}%</span>
-          <div className="h-1.5 bg-slate-950 rounded-full overflow-hidden mt-1">
-            <div className="h-full bg-blue-500" style={{ width: `${currentIntervention.progressPercent}%` }}></div>
+      {/* KPI Cards Row */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        {/* Progress Metric */}
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-2">
+          <div className="flex items-center justify-between text-slate-500">
+            <span className="text-xs font-medium">Program Progress</span>
+            <TrendingUp className="w-4 h-4 text-blue-600" />
+          </div>
+          <div className="flex items-baseline justify-between">
+            <span className="text-2xl font-bold text-slate-900">{currentIntervention.progressPercent}%</span>
+            <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">On Track</span>
+          </div>
+          <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-full bg-blue-600 rounded-full" style={{ width: `${currentIntervention.progressPercent}%` }} />
           </div>
         </div>
 
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-3.5 space-y-1">
-          <span className="text-[10px] text-slate-400 uppercase font-semibold block">Assigned Mentor</span>
-          <span className="text-sm font-bold text-slate-200 truncate block">{assignedMentor ? assignedMentor.name : 'Unassigned'}</span>
-          <span className="text-[10px] text-indigo-400 block">{assignedMentor ? assignedMentor.title : 'CDC Staff'}</span>
+        {/* Score Improvement */}
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-2">
+          <div className="flex items-center justify-between text-slate-500">
+            <span className="text-xs font-medium">Current vs Baseline</span>
+            <Award className="w-4 h-4 text-emerald-600" />
+          </div>
+          <div className="flex items-baseline justify-between">
+            <span className="text-2xl font-bold text-slate-900">{currentIntervention.currentAvgScore} pts</span>
+            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+              +{scoreDelta} pts ({currentIntervention.baselineAvgScore} initial)
+            </span>
+          </div>
+          <div className="text-[11px] text-slate-500">
+            Target Score: <span className="font-bold text-slate-800">{currentIntervention.targetAvgScore} pts</span> ({targetGap > 0 ? `${targetGap} pts remaining` : 'Target Met!'})
+          </div>
         </div>
+
+        {/* Enrolled Students & Group */}
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-2">
+          <div className="flex items-center justify-between text-slate-500">
+            <span className="text-xs font-medium">Enrolled Cohort</span>
+            <Users className="w-4 h-4 text-indigo-600" />
+          </div>
+          <div className="flex items-baseline justify-between">
+            <span className="text-2xl font-bold text-slate-900">{currentIntervention.studentCount || enrolledStudents.length || 18}</span>
+            <span className="text-xs font-semibold text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">
+              {assignedGroup ? assignedGroup.name : 'Target Group'}
+            </span>
+          </div>
+          <div className="text-[11px] text-slate-500">
+            Active tracking since {currentIntervention.startDate}
+          </div>
+        </div>
+
+        {/* Lead Mentor */}
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-2">
+          <div className="flex items-center justify-between text-slate-500">
+            <span className="text-xs font-medium">Faculty Mentor Lead</span>
+            <ShieldCheck className="w-4 h-4 text-purple-600" />
+          </div>
+          <div className="flex items-center gap-2.5 pt-1">
+            <div className="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center">
+              {assignedMentor ? assignedMentor.name.charAt(0) : 'M'}
+            </div>
+            <div>
+              <div className="font-bold text-slate-900 text-xs">{assignedMentor ? assignedMentor.name : 'Dr. S. Kumar'}</div>
+              <div className="text-[10px] text-slate-500">{assignedMentor ? assignedMentor.dept : 'CSE'} Department</div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      {/* Tab Navigation */}
-      <div className="flex border-b border-slate-800 text-xs font-semibold">
+      {/* Tabs Navigation */}
+      <div className="border-b border-slate-200 flex items-center gap-2 overflow-x-auto text-xs font-medium">
         {[
-          { id: 'overview', label: 'Overview & Diagnosis' },
-          { id: 'students', label: `Enrolled Students (${enrolledStudents.length})` },
-          { id: 'milestones', label: 'Progress & Milestones' },
-          { id: 'outcomes', label: 'Outcomes & Impact' },
+          { id: 'overview', label: 'Program Overview' },
+          { id: 'students', label: `Enrolled Cohort (${enrolledStudents.length || 18})` },
+          { id: 'milestones', label: 'Milestones & Schedule' },
+          { id: 'outcomes', label: 'Outcomes & Metrics' },
           { id: 'activity', label: 'Activity Log' }
         ].map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`px-4 py-2.5 border-b-2 transition-colors ${
+            className={`pb-3 px-3 transition-colors whitespace-nowrap font-semibold ${
               activeTab === tab.id
-                ? 'border-blue-500 text-blue-400 font-bold bg-blue-950/20'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'text-blue-600 border-b-2 border-blue-600'
+                : 'text-slate-500 hover:text-slate-800'
             }`}
           >
             {tab.label}
@@ -156,73 +184,52 @@ export const InterventionDetail: React.FC = () => {
         ))}
       </div>
 
-      {/* Tab 1: Overview & Diagnosis */}
+      {/* Tab 1: Overview */}
       {activeTab === 'overview' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-8 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <div className="lg:col-span-2 space-y-6">
             
-            {/* Problem & Goal Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 space-y-2">
-                <span className="text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <AlertTriangle className="w-4 h-4" />
-                  Identified Problem (Diagnosis)
-                </span>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  {currentIntervention.problemIdentified}
-                </p>
-              </div>
-
-              <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 space-y-2">
-                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Target className="w-4 h-4" />
-                  Target Goal & Output Deliverable
-                </span>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  {currentIntervention.targetDescription}
-                </p>
+            {/* Description Card */}
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
+              <h3 className="text-sm font-bold text-slate-900">Program Rationale & Objectives</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                {currentIntervention.targetDescription || 'This intervention program targets specific skill deficits identified during recent institutional evaluations. Designed to boost candidate eligibility and performance ahead of placement drives.'}
+              </p>
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100 text-xs">
+                <div>
+                  <span className="text-slate-400 font-medium">Start Date:</span>
+                  <span className="ml-2 font-semibold text-slate-800">{currentIntervention.startDate}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-medium">Target Deadline:</span>
+                  <span className="ml-2 font-semibold text-slate-800">{currentIntervention.deadline}</span>
+                </div>
               </div>
             </div>
 
-            {/* Curriculum Roadmap / Phases */}
-            <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 space-y-4">
-              <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                <FileText className="w-4 h-4 text-indigo-400" />
-                Intervention Curriculum & Milestone Plan
-              </h3>
-
-              <div className="space-y-3">
+            {/* Key Focus Areas */}
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
+              <h3 className="text-sm font-bold text-slate-900">Curriculum & Technical Modules</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 {[
-                  { phase: 'Phase 1', title: 'Foundational Assessment & Core Concepts', duration: 'Weeks 1-2', status: 'Completed', score: '92% Submission' },
-                  { phase: 'Phase 2', title: 'Guided Problem Solving & Live Architecture Design', duration: 'Weeks 3-5', status: 'In Progress', score: '78% Submission' },
-                  { phase: 'Phase 3', title: 'Hands-on Production Capstone Project', duration: 'Weeks 6-8', status: 'Upcoming', score: 'Pending' },
-                  { phase: 'Phase 4', title: 'Final Technical Evaluation & Mock Interview Audit', duration: 'Weeks 9-10', status: 'Upcoming', score: 'Pending' }
-                ].map((p, idx) => (
-                  <div key={idx} className="p-3.5 bg-slate-950 border border-slate-800 rounded-lg flex items-center justify-between gap-4 text-xs">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
-                        p.status === 'Completed' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' :
-                        p.status === 'In Progress' ? 'bg-blue-950 text-blue-400 border border-blue-800' :
-                        'bg-slate-900 text-slate-500 border border-slate-800'
+                  { title: 'System Architecture & Scalability', status: 'Completed', date: 'Week 1 - 2' },
+                  { title: 'Database Optimization & SQL Tuning', status: 'In Progress', date: 'Week 3 - 4' },
+                  { title: 'Concurrent Programming & Threads', status: 'Upcoming', date: 'Week 5' },
+                  { title: 'Mock Technical Interview Simulations', status: 'Upcoming', date: 'Week 6' }
+                ].map((mod, idx) => (
+                  <div key={idx} className="p-3 rounded-lg border border-slate-200 bg-slate-50 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-900">{mod.title}</span>
+                      <span className={`px-1.5 py-0.2 text-[9px] font-bold rounded ${
+                        mod.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                        mod.status === 'In Progress' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                        'bg-slate-100 text-slate-600'
                       }`}>
-                        {idx + 1}
-                      </div>
-                      <div>
-                        <div className="font-bold text-slate-200">{p.title}</div>
-                        <div className="text-[11px] text-slate-400">{p.phase} • {p.duration}</div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <span className="text-[11px] font-mono text-slate-400">{p.score}</span>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                        p.status === 'Completed' ? 'bg-emerald-950 text-emerald-300 border-emerald-800' :
-                        p.status === 'In Progress' ? 'bg-blue-950 text-blue-300 border-blue-800' :
-                        'bg-slate-900 text-slate-500 border-slate-800'
-                      }`}>
-                        {p.status}
+                        {mod.status}
                       </span>
                     </div>
+                    <div className="text-[10px] text-slate-500">{mod.date}</div>
                   </div>
                 ))}
               </div>
@@ -230,123 +237,95 @@ export const InterventionDetail: React.FC = () => {
 
           </div>
 
-          <div className="lg:col-span-4 space-y-6">
-            
-            {/* Mentor Overview Card */}
-            <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 space-y-3">
-              <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider border-b border-slate-800/60 pb-2">
-                Lead Mentor Assignment
-              </h3>
-
-              {assignedMentor ? (
-                <div className="space-y-3 text-xs">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-indigo-900 border border-indigo-700 flex items-center justify-center text-sm font-bold text-indigo-200">
-                      {assignedMentor.name.split(' ').map(n=>n[0]).join('')}
-                    </div>
-                    <div>
-                      <div className="font-bold text-slate-100 text-sm">{assignedMentor.name}</div>
-                      <div className="text-indigo-400">{assignedMentor.title}</div>
-                      <div className="text-[11px] text-slate-400">{assignedMentor.email}</div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Mentor Note</span>
-                    <p className="text-slate-300 italic">
-                      "Cohort is making steady progress in caching & concurrency modules. 8 students need follow-up on sharding."
-                    </p>
-                  </div>
+          {/* Side Info Panel */}
+          <div className="space-y-5">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 space-y-3">
+              <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2">Assigned Group</h3>
+              <div className="text-xs space-y-2">
+                <div className="font-bold text-blue-600">{assignedGroup ? assignedGroup.name : 'CSE Final Year Placement Remediation'}</div>
+                <div className="text-slate-600 text-[11px]">{assignedGroup ? assignedGroup.subtitle : 'System static segment'}</div>
+                <div className="pt-2 border-t border-slate-100 flex justify-between text-slate-500 text-[11px]">
+                  <span>Group Avg Score:</span>
+                  <span className="font-bold text-slate-900">{assignedGroup ? assignedGroup.avgScore : 680} pts</span>
                 </div>
-              ) : (
-                <p className="text-xs text-slate-400">No mentor assigned yet.</p>
-              )}
+              </div>
             </div>
 
-            {/* Target Cohort Group */}
-            <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 space-y-3">
-              <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider border-b border-slate-800/60 pb-2">
-                Associated Cohort / Group
-              </h3>
-
-              {assignedGroup ? (
-                <div className="space-y-2 text-xs">
-                  <div className="font-bold text-slate-100">{assignedGroup.name}</div>
-                  <div className="text-slate-400">{assignedGroup.purpose} Group • {assignedGroup.studentCount || assignedGroup.studentIds.length} Students</div>
-                  <div className="text-emerald-400 font-mono text-[11px]">Avg Group Tech Score: {assignedGroup.avgScore} pts</div>
-                </div>
-              ) : (
-                <p className="text-xs text-slate-400">Custom selected student cohort.</p>
-              )}
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 space-y-3">
+              <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2">Faculty Lead Contacts</h3>
+              <div className="text-xs space-y-2">
+                <div className="font-bold text-slate-900">{assignedMentor ? assignedMentor.name : 'Dr. S. Kumar'}</div>
+                <div className="text-slate-500 text-[11px]">{assignedMentor ? assignedMentor.email : 'skumar@glbitm.ac.in'}</div>
+                <div className="text-slate-500 text-[11px]">{assignedMentor ? assignedMentor.phone : '+91 98765 43210'}</div>
+              </div>
             </div>
-
           </div>
+
         </div>
       )}
 
-      {/* Tab 2: Enrolled Students */}
+      {/* Tab 2: Students */}
       {activeTab === 'students' && (
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-4 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-            <h3 className="text-sm font-bold text-slate-100">Enrolled Candidates ({enrolledStudents.length})</h3>
-            <div className="relative w-64">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-500" />
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden space-y-4">
+          <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/50">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
               <input
                 type="text"
-                placeholder="Search candidates..."
                 value={studentSearch}
-                onChange={(e) => setStudentSearch(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                onChange={e => setStudentSearch(e.target.value)}
+                placeholder="Search student in cohort..."
+                className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-blue-500"
               />
             </div>
+            <button className="px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-xs flex items-center gap-1.5 shrink-0">
+              <Plus className="w-3.5 h-3.5" /> Enroll More Students
+            </button>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">
-                  <th className="py-2.5 px-3">Student Name</th>
-                  <th className="py-2.5 px-3">Roll No & Dept</th>
-                  <th className="py-2.5 px-3">Baseline Score</th>
-                  <th className="py-2.5 px-3">Current Score</th>
-                  <th className="py-2.5 px-3">Growth</th>
-                  <th className="py-2.5 px-3">Status</th>
-                  <th className="py-2.5 px-3 text-right">Action</th>
+                <tr className="bg-slate-100/70 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[11px]">
+                  <th className="py-3 px-4">Student Name</th>
+                  <th className="py-3 px-3">Roll No</th>
+                  <th className="py-3 px-3">Dept</th>
+                  <th className="py-3 px-3 text-right">Baseline Score</th>
+                  <th className="py-3 px-3 text-right">Current Score</th>
+                  <th className="py-3 px-3 text-right">Delta</th>
+                  <th className="py-3 px-3 text-center">Status</th>
+                  <th className="py-3 px-3 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
-                {enrolledStudents.map(s => {
-                  const gain = s.techScore - s.previousTechScore;
+              <tbody className="divide-y divide-slate-200 bg-white">
+                {enrolledStudents.map(st => {
+                  const delta = st.techScore - st.previousTechScore;
                   return (
-                    <tr key={s.id} className="hover:bg-slate-800/40 cursor-pointer" onClick={() => navigateToStudent(s.id)}>
-                      <td className="py-3 px-3 font-bold text-slate-100 hover:text-blue-400">
-                        {s.name}
+                    <tr key={st.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="py-3 px-4">
+                        <div className="font-bold text-slate-900">{st.name}</div>
+                        <div className="text-[10px] text-slate-500">{st.email}</div>
                       </td>
-                      <td className="py-3 px-3 text-slate-400 font-mono text-[11px]">
-                        {s.rollNo} • {s.dept} ({s.year})
-                      </td>
-                      <td className="py-3 px-3 text-slate-400 font-mono">
-                        {s.previousTechScore} pts
-                      </td>
-                      <td className="py-3 px-3 font-bold text-indigo-400 font-mono">
-                        {s.techScore} pts
-                      </td>
-                      <td className="py-3 px-3 font-bold text-emerald-400 font-mono">
-                        +{gain > 0 ? gain : 14} pts
-                      </td>
+                      <td className="py-3 px-3 text-slate-600 font-medium">{st.rollNo}</td>
                       <td className="py-3 px-3">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                          s.status === 'High Potential' ? 'bg-purple-950 text-purple-300 border-purple-800' :
-                          s.status === 'High Growth' ? 'bg-emerald-950 text-emerald-300 border-emerald-800' :
-                          s.status === 'Needs Attention' ? 'bg-amber-950 text-amber-300 border-amber-800' :
-                          'bg-blue-950 text-blue-300 border-blue-800'
-                        }`}>
-                          {s.status}
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">
+                          {st.dept}
                         </span>
                       </td>
-                      <td className="py-3 px-3 text-right" onClick={(e) => e.stopPropagation()}>
-                        <button onClick={() => navigateToStudent(s.id)} className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1 justify-end">
-                          Profile <ChevronRight className="w-3.5 h-3.5" />
+                      <td className="py-3 px-3 text-right font-medium text-slate-600">{st.previousTechScore}</td>
+                      <td className="py-3 px-3 text-right font-bold text-slate-900">{st.techScore}</td>
+                      <td className="py-3 px-3 text-right font-bold text-emerald-600">+{delta} pts</td>
+                      <td className="py-3 px-3 text-center">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          Active Progress
+                        </span>
+                      </td>
+                      <td className="py-3 px-3 text-center">
+                        <button 
+                          onClick={() => navigateToStudent(st.id)}
+                          className="px-2.5 py-1 text-[10px] font-semibold text-blue-600 bg-blue-50 rounded hover:bg-blue-100"
+                        >
+                          View Profile
                         </button>
                       </td>
                     </tr>
@@ -360,64 +339,78 @@ export const InterventionDetail: React.FC = () => {
 
       {/* Tab 3: Milestones */}
       {activeTab === 'milestones' && (
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 space-y-4">
-          <h3 className="text-sm font-bold text-slate-100">Milestones & Submission Audit</h3>
-          <p className="text-xs text-slate-400">Weekly progress checkpoints, code submission rates, and mentor verification log.</p>
-          <div className="space-y-3 text-xs">
-            <div className="p-4 bg-slate-950 border border-slate-800 rounded-lg flex justify-between items-center">
-              <div>
-                <div className="font-bold text-slate-200">Milestone 1: Microservices Architecture Schema</div>
-                <div className="text-slate-400 text-[11px]">Due Aug 15 • 100% Verified by Mentor</div>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
+          <h3 className="text-sm font-bold text-slate-900">Program Milestones Checklist</h3>
+          <div className="space-y-3">
+            {[
+              { title: 'Baseline Diagnostic Assessment', date: 'Mar 15, 2026', done: true },
+              { title: 'Core Algorithms Workshop', date: 'Apr 02, 2026', done: true },
+              { title: 'Mid-Intervention Evaluation Drive', date: 'May 20, 2026', done: true },
+              { title: 'System Design Mock Interviews', date: 'Jun 10, 2026', done: false },
+              { title: 'Final Placement Benchmark Test', date: 'Jul 28, 2026', done: false }
+            ].map((m, idx) => (
+              <div key={idx} className="flex items-center justify-between p-3 rounded-lg border border-slate-200 bg-slate-50">
+                <div className="flex items-center gap-3">
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${
+                    m.done ? 'bg-emerald-600 text-white' : 'border-2 border-slate-300 text-transparent'
+                  }`}>
+                    <Check className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <div className={`text-xs font-bold ${m.done ? 'text-slate-900' : 'text-slate-600'}`}>{m.title}</div>
+                    <div className="text-[10px] text-slate-400">{m.date}</div>
+                  </div>
+                </div>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                  m.done ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                }`}>
+                  {m.done ? 'Completed' : 'Pending'}
+                </span>
               </div>
-              <span className="px-2.5 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold">100% Passed</span>
-            </div>
-            <div className="p-4 bg-slate-950 border border-slate-800 rounded-lg flex justify-between items-center">
-              <div>
-                <div className="font-bold text-slate-200">Milestone 2: Concurrency & Redis Caching Layer</div>
-                <div className="text-slate-400 text-[11px]">Due Sep 01 • 32 / 42 Submitted</div>
-              </div>
-              <span className="px-2.5 py-1 rounded bg-blue-950 text-blue-300 border border-blue-800 font-bold">76% Passed</span>
-            </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* Tab 4: Outcomes & Impact */}
+      {/* Tab 4: Outcomes */}
       {activeTab === 'outcomes' && (
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 space-y-4">
-          <h3 className="text-sm font-bold text-slate-100">Empirical Outcome Impact</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase font-semibold">Score Delta</span>
-              <div className="text-2xl font-bold text-emerald-400">+{scoreDelta} pts</div>
-              <span className="text-[11px] text-slate-400">Average student improvement</span>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
+          <h3 className="text-sm font-bold text-slate-900">Verified Impact & Skill Deltas</h3>
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200">
+              <div className="text-2xl font-bold text-emerald-700">+{scoreDelta} pts</div>
+              <div className="text-xs text-slate-600 font-medium mt-1">Avg Score Growth</div>
             </div>
-            <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase font-semibold">Mock Pass Rate</span>
-              <div className="text-2xl font-bold text-blue-400">82%</div>
-              <span className="text-[11px] text-slate-400">Up from 28% baseline</span>
+            <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
+              <div className="text-2xl font-bold text-blue-700">89%</div>
+              <div className="text-xs text-slate-600 font-medium mt-1">Students Reached Threshold</div>
             </div>
-            <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase font-semibold">Placement Match</span>
-              <div className="text-2xl font-bold text-indigo-400">34 Candidates</div>
-              <span className="text-[11px] text-slate-400">Matched to Tier-1 SDE Roles</span>
+            <div className="p-4 rounded-lg bg-purple-50 border border-purple-200">
+              <div className="text-2xl font-bold text-purple-700">4.8 / 5</div>
+              <div className="text-xs text-slate-600 font-medium mt-1">Mentor Feedback Score</div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Tab 5: Activity Log */}
+      {/* Tab 5: Activity */}
       {activeTab === 'activity' && (
-        <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 space-y-3 text-xs">
-          <h3 className="text-sm font-bold text-slate-100">Intervention Audit Trail</h3>
-          <div className="space-y-3 font-mono">
-            <div className="p-3 bg-slate-950 rounded-lg border border-slate-800 flex justify-between">
-              <span className="text-slate-300">[2026-08-28] Mentor Dr. Aris Thorne updated Milestone 2 score ratings.</span>
-              <span className="text-slate-500">System Log</span>
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
+          <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2">Recent Timeline Logs</h3>
+          <div className="space-y-3 text-xs text-slate-600">
+            <div className="flex gap-3">
+              <div className="w-2 h-2 rounded-full bg-blue-600 mt-1.5 shrink-0" />
+              <div>
+                <span className="font-bold text-slate-900">Mid-term score update synced:</span> Average cohort score increased by +28 points.
+                <div className="text-[10px] text-slate-400">2 days ago by CDC Automated Assessment Engine</div>
+              </div>
             </div>
-            <div className="p-3 bg-slate-950 rounded-lg border border-slate-800 flex justify-between">
-              <span className="text-slate-300">[2026-07-01] Intervention initiated with 42 students from CSE 4th Year.</span>
-              <span className="text-slate-500">CDC Admin</span>
+            <div className="flex gap-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+              <div>
+                <span className="font-bold text-slate-900">Mentor Review Completed:</span> Dr. S. Kumar conducted System Architecture Review #2.
+                <div className="text-[10px] text-slate-400">5 days ago by Dr. S. Kumar</div>
+              </div>
             </div>
           </div>
         </div>
